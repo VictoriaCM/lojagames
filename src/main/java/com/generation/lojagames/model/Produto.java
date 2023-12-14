@@ -5,11 +5,14 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -26,7 +29,7 @@ public class Produto {
 	private Long id;
 
 	@Column(length = 64)
-	@Size(min = 10, max = 64, message = "O nome do jogo precisa ter de 10 a 64 caracteres.")
+	@Size(min = 2, max = 64, message = "O nome do jogo precisa ter de 10 a 64 caracteres.")
 	@NotBlank(message = " O nome do jogo é obrigatório.")
 	private String nome;
 
@@ -51,6 +54,18 @@ public class Produto {
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataLancamento;
+
+	@ManyToOne
+	@JsonIgnoreProperties("produto")
+	private Categoria categoria;
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
 
 	public Long getId() {
 		return id;
