@@ -29,7 +29,7 @@ public class Produto {
 	private Long id;
 
 	@Column(length = 64)
-	@Size(min = 2, max = 64, message = "O nome do jogo precisa ter de 10 a 64 caracteres.")
+	@Size(min = 2, max = 64, message = "O nome do jogo precisa ter de 2 a 64 caracteres.")
 	@NotBlank(message = " O nome do jogo é obrigatório.")
 	private String nome;
 

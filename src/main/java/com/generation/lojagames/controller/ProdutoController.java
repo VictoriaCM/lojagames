@@ -1,5 +1,6 @@
 package com.generation.lojagames.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,11 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import jakarta.validation.Valid;
 
 import com.generation.lojagames.model.Produto;
-import com.generation.lojagames.repository.ProdutoRepository;
 import com.generation.lojagames.repository.CategoriaRepository;
+import com.generation.lojagames.repository.ProdutoRepository;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/produtos")
@@ -66,20 +68,26 @@ public class ProdutoController {
 
 	// Criar produto
 	@PutMapping
-	public ResponseEntity<Produto> update(@Valid @RequestBody Produto produto) {
-
-		if (produtoRepository.existsById(produto.getId())) {
-			if (categoriaRepository.existsById(produto.getId())) 
-				if (categoriaRepository.existsById(produto.getCategoria().getId()))
+	public ResponseEntity<Produto> put(@RequestBody Produto produto) {
+		if (produtoRepository.existsById(produto.getId()))
+			if (categoriaRepository.existsById(produto.getCategoria().getId()))
 				return ResponseEntity.status(HttpStatus.OK).body(produtoRepository.save(produto));
-			
-				else
+			else
+				throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria inexistente!", null);
-		}
+		else
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+	}
 
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	// Métodos maior que - menor que
+	@GetMapping("/precomaior/{preco}")
+	public ResponseEntity<List<Produto>> getByMaior(@PathVariable BigDecimal preco) {
+		return ResponseEntity.ok(produtoRepository.findByPrecoGreaterThan(preco));
+	}
 
+	@GetMapping("/precomenor/{preco}")
+	public ResponseEntity<List<Produto>> getByMenor(@PathVariable BigDecimal preco) {
+		return ResponseEntity.ok(produtoRepository.findByPrecoLessThan(preco));
 	}
 
 	// Delete by id
