@@ -59,14 +59,6 @@ public class Produto {
 	@JsonIgnoreProperties("produto")
 	private Categoria categoria;
 
-	public Categoria getCategoria() {
-		return categoria;
-	}
-
-	public void setCategoria(Categoria categoria) {
-		this.categoria = categoria;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -123,4 +115,11 @@ public class Produto {
 		this.dataLancamento = dataLancamento;
 	}
 
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
 }
